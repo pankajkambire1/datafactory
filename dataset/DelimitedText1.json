@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "salaries_202207111651.csv",
+				"fileName": "citypopulation.csv",
 				"container": "input"
 			},
 			"columnDelimiter": ",",
