@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "newdata.csv",
+				"fileName": "cityoutdata.csv",
 				"container": "output"
 			},
 			"columnDelimiter": ",",
