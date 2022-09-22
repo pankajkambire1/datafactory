@@ -1,0 +1,76 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "CityPopulationOS"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AsiaCitiesDS",
+						"type": "DatasetReference"
+					},
+					"name": "AsiaCitiesOutput"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "NonAsiaCitiesOutput"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AsiaCitiesOnly"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          City as string,",
+				"          Region as string,",
+				"          Year as integer,",
+				"          Population as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> CityPopulationOS",
+				"CityPopulationOS split(Region == \"Asia\",",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> AsiaCitiesOnly@(AsiaCities, NonAsiaCities)",
+				"AsiaCitiesOnly@AsiaCities sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          City as string,",
+				"          Region as string,",
+				"          Year as string,",
+				"          Population as string",
+				"     ),",
+				"     partitionFileNames:['asia_cities.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> AsiaCitiesOutput",
+				"AsiaCitiesOnly@NonAsiaCities sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Prop_0 as string,",
+				"          Prop_1 as string,",
+				"          Prop_2 as string,",
+				"          Prop_3 as string",
+				"     ),",
+				"     partitionFileNames:['non_asia_cities.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> NonAsiaCitiesOutput"
+			]
+		}
+	}
+}
