@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "copyhogaya.csv",
 				"container": "output"
 			},
 			"columnDelimiter": ",",
